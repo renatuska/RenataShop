@@ -5,11 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public interface UserStorage {
-    User getUser(String var1) throws Exception;
-
+    User getUser(String username) throws Exception;
     ArrayList<User> getAllUsers() throws FileNotFoundException, Exception;
-
-    void addUser(User var1) throws IOException, Exception;
-
-    void deleteUser(String var1) throws Exception;
+    void addUser(User user) throws IOException, Exception;
+    void deleteUser(String username) throws Exception;
 }

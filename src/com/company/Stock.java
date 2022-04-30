@@ -1,6 +1,10 @@
 package com.company;
 
-public class Stock  {
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+public class Stock {
 
     private String itemId;
     private String itemName;
@@ -15,30 +19,29 @@ public class Stock  {
     }
 
     public String getItemId() {
-        return this.itemId;
+        return itemId;
     }
-
     public String getItemName() {
-        return this.itemName;
+        return itemName;
     }
 
     public double getItemCosts() {
-        return this.itemCosts;
+        return itemCosts;
     }
 
-    public double getItemPrice() {
-        return this.itemCosts < 20.0D ? this.itemCosts * 1.3D : this.itemCosts * 2.0D;
+    public  double getItemPrice() {
+        if(itemCosts < 20) {
+            return itemCosts * 1.3;
+        } else {
+            return itemCosts * 2;
+        }
     }
 
     public void setQt(int qt) {
-        this.itemQt = qt;
+        itemQt = qt;
     }
 
     public int getItemQt() {
-        return this.itemQt;
-    }
-
-    public String print() {
-        return null;
+        return itemQt;
     }
 }

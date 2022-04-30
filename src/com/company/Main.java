@@ -18,10 +18,12 @@ public class Main {
 
 	static UserService userService = new UserService(new FileUserStorage("src/com/company/userdata"));
 	static StockService stockService = new StockService(new FileStockStorage("src/com/company/stockdata"));
+	static ReportService reportService = new ReportService(new FileReportStorage("src/com/company/reportdata"));
 
 	//static SqlLiteStorage db = new SqlLiteStorage();
 	//static UserService userService = new UserService(db);
 	//static StockService stockService = new StockService(db);
+	//static ReportService reportService = new ReportService(db);
 
 	static boolean isRunning = true;
 
@@ -310,7 +312,7 @@ public class Main {
 					System.out.println("Nepakankamas prekių kiekis sandėlyje:" + stock.getItemQt());
 				}
 			}
-			System.out.println("Ar norite tęsti aspipirkimą:");
+			System.out.println("Ar norite tęsti apsipirkimą:");
 			System.out.println("[1] Taip");
 			System.out.println("[2] Ne");
 			String choice = SC.nextLine();
@@ -320,9 +322,11 @@ public class Main {
 					break;
 				case "2":
 					finished = true;
+					System.out.println("Tęskite pirkimą, pasirinkdami meniu 4 punktą");
 					break;
 				default:
 					finished = true;
+					System.out.println("Tęskite pirkimą, pasirinkdami meniu 4 punktą");
 					break;
 			}
 		}
@@ -339,6 +343,9 @@ public class Main {
 			if(stockFromDb.getItemQt() >= stock.getItemQt()) {
 				stockFromDb.setQt(stockFromDb.getItemQt() - stock.getItemQt());
 				stockService.updateStock(stockFromDb);
+				reportService.addDataToReport(stock);
+				System.out.println("Pirkimo procesas sėkmingai užbaigtas");
+
 			}  else {
 				System.out.println("Nepakankamas prekių kiekis sandėlyje:"+ stock.getItemName());
 

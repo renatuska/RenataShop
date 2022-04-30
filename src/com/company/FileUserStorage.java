@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Scanner;
 
 public class FileUserStorage implements UserStorage {
@@ -15,19 +14,13 @@ public class FileUserStorage implements UserStorage {
     }
 
     public User getUser(String username) throws Exception {
-        ArrayList<User> users = this.getAllUsers();
-        Iterator var3 = users.iterator();
-
-        User user;
-        do {
-            if (!var3.hasNext()) {
-                return null;
+        ArrayList<User> users = getAllUsers();
+        for (User user : users) {
+            if (user.getUsername().equalsIgnoreCase(username)) {
+                return user;
             }
-
-            user = (User)var3.next();
-        } while(!user.getUsername().equalsIgnoreCase(username));
-
-        return user;
+        }
+        return null;
     }
 
     public ArrayList<User> getAllUsers() throws Exception {
@@ -59,12 +52,10 @@ public class FileUserStorage implements UserStorage {
     }
 
     public void deleteUser(String username) throws Exception {
-        ArrayList<User> users = this.getAllUsers();
-        boolean found = false;
-        Iterator var4 = users.iterator();
+        ArrayList<User> users = getAllUsers();
 
-        while(var4.hasNext()) {
-            User user = (User)var4.next();
+        boolean found = false;
+        for (User user : users) {
             if (user.getUsername().equalsIgnoreCase(username)) {
                 users.remove(user);
                 found = true;
@@ -72,16 +63,13 @@ public class FileUserStorage implements UserStorage {
             }
         }
 
-        if (found) {
-            FileWriter fw = new FileWriter(this.filePath);
+        //lets rewrite
+        if(found) {
+            FileWriter fw = new FileWriter(filePath);
             PrintWriter writer = new PrintWriter(fw);
-            Iterator var6 = users.iterator();
-
-            while(var6.hasNext()) {
-                User u = (User)var6.next();
-                this.writeUser(writer, u);
+            for (User u : users) {
+                writeUser(writer, u);
             }
-
             writer.close();
         }
 

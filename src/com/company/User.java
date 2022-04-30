@@ -2,9 +2,10 @@ package com.company;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Iterator;
 
-public class User {
+
+public class User  {
+
 	private String username;
 	private String password;
 	private Role role;
@@ -14,6 +15,7 @@ public class User {
 	private int age;
 	private Hashtable<String, Stock> basket;
 
+
 	public User(String username, String password, Role role, String name, String surname, String address, int age) {
 		this.username = username;
 		this.password = password;
@@ -22,66 +24,75 @@ public class User {
 		this.age = age;
 		this.address = address;
 		this.role = role;
-		this.basket = new Hashtable();
+		this.basket = new Hashtable<>();
 	}
 
 	public String getUsername() {
-		return this.username;
+		return username;
 	}
 
 	public String getPassword() {
-		return this.password;
+		return password;
 	}
 
 	public Role getRole() {
-		return this.role;
+		return role;
 	}
 
 	public String getName() {
-		return this.name;
+		return name;
 	}
 
 	public String getSurname() {
-		return this.surname;
+		return surname;
 	}
 
 	public String getAddress() {
-		return this.address;
+		return address;
 	}
 
 	public int getAge() {
-		return this.age;
+		return age;
 	}
 
-	public String print() {
-		return "User{username='" + this.username + '\'' + ", password='" + this.password + '\'' + ", role='" + this.role + '\'' + ", name='" + this.name + '\'' + ", surname='" + this.surname + '\'' + ", address='" + this.address + '\'' + ", age=" + this.age + '}';
+	@Override
+	public String toString() {
+		return "User{" +
+				"username='" + username + '\'' +
+				", password='" + password + '\'' +
+				", role='" + role + '\'' +
+				", name='" + name + '\'' +
+				", surname='" + surname + '\'' +
+				", address='" + address + '\'' +
+				", age=" + age +
+				'}';
 	}
 
-	public void addToBasket(Stock stock) {
+	public void addToBasket(Stock stock){
 		this.basket.put(stock.getItemId(), stock);
 	}
 
-	public void removeFromBasket(String id) {
+	public void removeFromBasket(String id){
 		this.basket.remove(id);
 	}
 
 	public Stock getStockFromBasket(String id) {
-		return this.basket.containsKey(id) ? (Stock)this.basket.get(id) : null;
-	}
-
-	public ArrayList<Stock> getStocksFromBasket() {
-		ArrayList<Stock> list = new ArrayList();
-		Iterator var2 = this.basket.values().iterator();
-
-		while(var2.hasNext()) {
-			Stock stock = (Stock)var2.next();
-			list.add(stock);
+		if(this.basket.containsKey(id)) {
+			return this.basket.get(id);
 		}
 
+		return null;
+	}
+
+	public ArrayList<Stock> getStocksFromBasket(){
+		ArrayList<Stock> list = new ArrayList<>();
+		for (Stock stock : basket.values()) {
+			list.add(stock);
+		}
 		return list;
 	}
 
-	public void clearBasket() {
+	public void clearBasket(){
 		this.basket.clear();
 	}
 }

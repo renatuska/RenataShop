@@ -5,16 +5,18 @@ import java.util.ArrayList;
 
 public class ReportService {
     private ReportStorage db;
-
-    public ReportService(ReportStorage db) {
+    public ReportService(ReportStorage db)  {
         this.db = db;
     }
 
     public void addDataToReport(Stock stock) throws IOException {
-        this.db.addDataToReport(stock);
+        db.addDataToReport(stock);
     }
-
     public ArrayList<Stock> getAllData() {
-        return this.db.getAllData();
+        return db.getAllData();
     }
+//     double getRevenue(){
+//        Report
+//     }
+
 }

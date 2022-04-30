@@ -1,9 +1,11 @@
 package com.company;
 
+import static com.company.Role.ADMIN;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public class UserService {
+
 	UserStorage db;
 
 	public UserService(UserStorage db) {
@@ -11,64 +13,60 @@ public class UserService {
 	}
 
 	public User getUser(String username, String password) throws Exception {
-		User user = this.db.getUser(username);
-		if (user != null && user.getPassword().equals(password)) {
+		User user = db.getUser(username);
+		if(user != null && user.getPassword().equals(password)) {
 			return user;
-		} else {
-			throw new UserException("Neteisingi prisijungimo duomenys");
 		}
+		throw new UserException("Neteisingi prisijungimo duomenys");
 	}
 
 	public ArrayList<User> getAllUsers() throws Exception {
-		return this.db.getAllUsers();
+		return db.getAllUsers();
 	}
 
 	public boolean isUserExists(String username) throws Exception {
-		User user = this.db.getUser(username);
-		return user != null;
+		User user = db.getUser(username);
+		if(user == null) return false;
+		else return true;
 	}
 
 	public void addUser(User user) throws Exception {
-		this.db.addUser(user);
+		db.addUser(user);
 	}
 
 	public void deleteUserByUsername(String username) throws Exception {
-		this.db.deleteUser(username);
+		db.deleteUser(username);
 	}
 
 	public void deleteAdmin(User adminUser) throws Exception {
-		this.validateAdminDeletion();
-		this.deleteUserByUsername(adminUser.getUsername());
+		validateAdminDeletion();
+		deleteUserByUsername(adminUser.getUsername());
 	}
 
 	private void validateAdminDeletion() throws Exception {
 		int adminCount = 0;
-		Iterator var2 = this.getAllUsers().iterator();
+		for (User user : getAllUsers()) {
 
-		while(var2.hasNext()) {
-			User user = (User)var2.next();
-			if (user.getRole().equals(Role.ADMIN)) {
-				++adminCount;
+			if (user.getRole().equals(ADMIN)) {
+				adminCount++;
 			}
 		}
-
 		if (adminCount <= 1) {
 			throw new AdminDeletionException("ADMIN vartotojo istrinti negalima nes tai yra vienintelis admin vartotojas sistemoje");
 		}
 	}
 
+
 	private User getUserByUsername(String username, ArrayList<User> allUsers) throws UserException {
-		Iterator iter = allUsers.iterator();
+		Iterator<User> iter = allUsers.iterator();
 
-		User userToDelete;
-		do {
-			if (!iter.hasNext()) {
-				throw new UserException(String.format("Vartotojas su prisijungimo vardu: '%s' neegzistuoja", username));
+		while (iter.hasNext()) {
+
+			User userToDelete = iter.next();
+			if (userToDelete.getUsername().equalsIgnoreCase(username)) {
+				return userToDelete;
 			}
-
-			userToDelete = (User)iter.next();
-		} while(!userToDelete.getUsername().equalsIgnoreCase(username));
-
-		return userToDelete;
+		}
+		throw new UserException(String.format("Vartotojas su prisijungimo vardu: \'%s\' neegzistuoja", username));
 	}
 }

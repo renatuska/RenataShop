@@ -5,11 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public interface StockStorage {
-    Stock getStock(String var1) throws Exception;
-
+    Stock getStock(String id) throws Exception;
     ArrayList<Stock> getAllStocks() throws FileNotFoundException, Exception;
-
-    void addOrUpdateStock(Stock var1) throws IOException, Exception;
-
-    void deleteStock(String var1) throws Exception;
+    void addOrUpdateStock(Stock stock) throws IOException, Exception;
+    void deleteStock(String id) throws Exception;
 }
