@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ReportService {
-    private ReportStorage db;
+    private final ReportStorage db;
     public ReportService(ReportStorage db)  {
         this.db = db;
     }

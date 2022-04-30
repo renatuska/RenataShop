@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class StockService {
 
-    private StockStorage db;
+    private final StockStorage db;
     public StockService(StockStorage db)  {
         this.db = db;
     }

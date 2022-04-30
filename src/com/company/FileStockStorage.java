@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class FileStockStorage implements StockStorage {
 
-    private String filePath;
+    private final String filePath;
 
     public FileStockStorage(String filePath) {
         this.filePath = filePath;
@@ -24,7 +24,7 @@ public class FileStockStorage implements StockStorage {
     }
 
     @Override
-    public ArrayList<Stock> getAllStocks() throws FileNotFoundException, Exception {
+    public ArrayList<Stock> getAllStocks() throws Exception {
         File file = new File(filePath);
         Scanner sc = new Scanner(file);
         ArrayList<Stock> stocks = new ArrayList<>();
@@ -44,7 +44,7 @@ public class FileStockStorage implements StockStorage {
     }
 
     @Override
-    public void addOrUpdateStock(Stock stock) throws IOException, Exception {
+    public void addOrUpdateStock(Stock stock) throws Exception {
         if(stock == null) return;
 
         ArrayList<Stock> stocks = getAllStocks();
@@ -95,7 +95,7 @@ public class FileStockStorage implements StockStorage {
         }
     }
 
-    private void addStock(Stock stock) throws IOException, Exception {
+    private void addStock(Stock stock) throws Exception {
         FileWriter fw = new FileWriter(filePath, true);
         PrintWriter writer = new PrintWriter(fw);
         writeStock(writer, stock);

@@ -3,7 +3,6 @@ package com.company;
 import static com.company.Role.ADMIN;
 import static com.company.Role.CUSTOMER;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -25,8 +24,6 @@ public class Main {
 	//static StockService stockService = new StockService(db);
 	//static ReportService reportService = new ReportService(db);
 
-	static boolean isRunning = true;
-
 	public static void main(String[] args) throws Exception {
 		User loggedUser = null;
 		try {
@@ -45,7 +42,7 @@ public class Main {
 
 						try {
 							loggedUser = userService.getUser(username, password);
-							userMenu(loggedUser, userService);
+							userMenu(loggedUser);
 						} catch (UserException e) {
 							System.out.println(e.getMessage());
 						} catch (UserLogOutException e) {
@@ -73,7 +70,7 @@ public class Main {
 	}
 
 
-	private static void userMenu(User user, UserService userService) throws Exception {
+	private static void userMenu(User user) throws Exception {
 		if (user.getRole().equals(CUSTOMER)) {
 
 			customerUserMenu(user);
@@ -106,7 +103,7 @@ public class Main {
 
 					try {
 						deleteUser(adminUser, usernameToDelete);
-						System.out.printf("Vartotojas \'%s\' sekmingai ištrintas\n", usernameToDelete);
+						System.out.printf("Vartotojas '%s' sekmingai ištrintas\n", usernameToDelete);
 						return;
 					} catch (AdminDeletionException | UserException e) {
 						System.out.println(e.getMessage());
@@ -190,7 +187,11 @@ public class Main {
 		userService.addUser(user);
 		System.out.println("Vartotojas sėkmingai užregistruotas");
 		System.out.println();
-		customerUserMenu(user);
+		try {
+			customerUserMenu(user);
+		} catch(UserLogOutException e) {
+
+		}
 	}
 
 	private static int getAge() {
@@ -212,7 +213,7 @@ public class Main {
 	}
 
 	private static String getValidUsername() throws Exception {
-		String username = "";
+		String username;
 		while (true) {
 			System.out.println("************************************************************************************************************");
 			System.out.print("Įveskite prisijungimo vardą: ");
@@ -220,7 +221,7 @@ public class Main {
 			if (!userService.isUserExists(username)) {
 				return username;
 			}
-			System.out.printf("Vartotojo vardas \'%s\' užimtas\n", username);
+			System.out.printf("Vartotojo vardas '%s' užimtas\n", username);
 		}
 	}
 
@@ -291,7 +292,7 @@ public class Main {
 	private static void addItemsToBasket(User loggedUser) throws Exception {
 		System.out.println("************************************************************************************************************");
 		boolean finished = false;
-		while (finished == false) {
+		while (!finished) {
 			System.out.println("Įveskite perkamos prekės ID: ");
 			String itemID = SC.nextLine();
 			System.out.print("Įveskite perkamos prekės kiekį: ");
@@ -305,12 +306,14 @@ public class Main {
 					alreadyAddedStockCount = stockFromBasket.getItemQt();
 				}
 
-				if (stock.getItemQt() > itemQt + alreadyAddedStockCount) {
+				if (stock.getItemQt() >= itemQt + alreadyAddedStockCount) {
 					Stock basketStock = new Stock(stock.getItemId(), stock.getItemName(), stock.getItemCosts(), itemQt + alreadyAddedStockCount);
 					loggedUser.addToBasket(basketStock);
 				} else {
 					System.out.println("Nepakankamas prekių kiekis sandėlyje:" + stock.getItemQt());
 				}
+			} else {
+				System.out.println("Preke kurios kodas: " + itemID + " neegzistuoja");
 			}
 			System.out.println("Ar norite tęsti apsipirkimą:");
 			System.out.println("[1] Taip");
@@ -338,6 +341,7 @@ public class Main {
 			Stock stockFromDb = stockService.getStockbyId(stock.getItemId());
 			if(stockFromDb == null) {
 				loggedUser.removeFromBasket(stock.getItemId());
+				System.out.println("Preke nerasta sandalyje: "+ stock.getItemId());
 			}
 
 			if(stockFromDb.getItemQt() >= stock.getItemQt()) {
@@ -347,7 +351,7 @@ public class Main {
 				System.out.println("Pirkimo procesas sėkmingai užbaigtas");
 
 			}  else {
-				System.out.println("Nepakankamas prekių kiekis sandėlyje:"+ stock.getItemName());
+				System.out.println("Nepakankamas prekių kiekis sandėlyje:"+ stockFromDb.getItemName());
 
 			}
 		}
@@ -401,8 +405,8 @@ public class Main {
 		}
 
 		int itemQt = 0;
-		boolean Qt = false;
-		while(Qt == false) {
+		boolean qt = false;
+		while(!qt) {
 			try {
 				System.out.print("Įveskite prekės kiekį: ");
 				itemQt = SC.nextInt();
@@ -411,7 +415,7 @@ public class Main {
 				SC.nextLine();
 				continue;
 			}
-			Qt = true;
+			qt = true;
 		}
 		SC.nextLine();
 		stockService.addStock(new Stock(itemId, itemName, itemCosts, itemQt));

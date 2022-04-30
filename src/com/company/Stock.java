@@ -1,14 +1,10 @@
 package com.company;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-
 public class Stock {
 
-    private String itemId;
-    private String itemName;
-    private double itemCosts;
+    private final String itemId;
+    private final String itemName;
+    private final double itemCosts;
     private int itemQt;
 
     public Stock(String itemId, String itemName, double itemCosts, int itemQt) {

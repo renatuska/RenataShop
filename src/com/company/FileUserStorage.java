@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class FileUserStorage implements UserStorage {
-    private String filePath;
+    private final String filePath;
 
     public FileUserStorage(String filePath) {
         this.filePath = filePath;
@@ -26,7 +26,7 @@ public class FileUserStorage implements UserStorage {
     public ArrayList<User> getAllUsers() throws Exception {
         File file = new File(this.filePath);
         Scanner sc = new Scanner(file);
-        ArrayList users = new ArrayList();
+        ArrayList<User> users = new ArrayList<>();
 
         while(sc.hasNextLine()) {
             String username = sc.nextLine();

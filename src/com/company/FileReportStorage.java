@@ -6,7 +6,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class FileReportStorage  implements ReportStorage{
-    private String filePath;
+    private final String filePath;
 
     public FileReportStorage(String filePath) {
         this.filePath = filePath;
