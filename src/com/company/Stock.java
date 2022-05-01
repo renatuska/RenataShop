@@ -4,10 +4,10 @@ public class Stock {
 
     private final String itemId;
     private final String itemName;
-    private final double itemCosts;
+    private final float itemCosts;
     private int itemQt;
 
-    public Stock(String itemId, String itemName, double itemCosts, int itemQt) {
+    public Stock(String itemId, String itemName, float itemCosts, int itemQt) {
         this.itemId = itemId;
         this.itemName = itemName;
         this.itemCosts = itemCosts;
@@ -21,13 +21,13 @@ public class Stock {
         return itemName;
     }
 
-    public double getItemCosts() {
+    public float getItemCosts() {
         return itemCosts;
     }
 
-    public  double getItemPrice() {
+    public  float getItemPrice() {
         if(itemCosts < 20) {
-            return itemCosts * 1.3;
+            return itemCosts * (float)1.3;
         } else {
             return itemCosts * 2;
         }

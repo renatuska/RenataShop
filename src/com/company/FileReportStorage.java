@@ -1,9 +1,8 @@
 package com.company;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class FileReportStorage  implements ReportStorage{
     private final String filePath;
@@ -13,7 +12,7 @@ public class FileReportStorage  implements ReportStorage{
     }
 
     @Override
-    public void addDataToReport(Stock stock) throws IOException {
+    public void addDataToReport(Stock stock) throws Exception {
         FileWriter fw = new FileWriter(filePath, true);
         PrintWriter writer = new PrintWriter(fw);
         writeData(writer, stock);
@@ -23,17 +22,31 @@ public class FileReportStorage  implements ReportStorage{
     private void writeData(PrintWriter writer, Stock item) {
         writer.println(item.getItemId());
         writer.println(item.getItemName());
-        writer.println(item.getItemPrice());
         writer.println(item.getItemCosts());
         writer.println(item.getItemQt());
         writer.println();
     }
 
     @Override
-    public ArrayList<Stock> getAllData() {
+    public ArrayList<Stock> getAllData() throws Exception {
+        File file = new File(filePath);
+        Scanner sc = new Scanner(file);
+        ArrayList<Stock> stocks = new ArrayList<>();
 
-        return null;
+        while (sc.hasNextLine()) {
+            String itemId = sc.nextLine();
+            String itemName = sc.nextLine();
+            float itemCosts = sc.nextFloat();
+            int itemQt = sc.nextInt();
+            sc.nextLine();
+            sc.nextLine();
+
+            Stock stock = new Stock(itemId, itemName, itemCosts, itemQt);
+            stocks.add(stock);
+        }
+        return stocks;
     }
+
 
 }
 

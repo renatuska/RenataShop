@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class SqlLiteStorage implements UserStorage, StockStorage, ReportStorage {
+public abstract class SqlLiteStorage implements UserStorage, StockStorage, ReportStorage {
 
     @Override
     public Stock getStock(String id) throws Exception {

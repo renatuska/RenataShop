@@ -32,7 +32,7 @@ public class FileStockStorage implements StockStorage {
         while (sc.hasNextLine()) {
             String itemId = sc.nextLine();
             String itemName = sc.nextLine();
-            double itemCosts = sc.nextDouble();
+            float itemCosts = sc.nextFloat();
             int itemQt = sc.nextInt();
             sc.nextLine();
             sc.nextLine();

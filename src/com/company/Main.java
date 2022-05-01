@@ -108,27 +108,21 @@ public class Main {
 					} catch (AdminDeletionException | UserException e) {
 						System.out.println(e.getMessage());
 					}
-
 					break;
-				case "5": //Patvirtinti prekių užsakymą
+				case "5": // Ataskaitos:
+					System.out.println("************************************************************************************************************");
+					System.out.println("Ataskaitos: ");
+					System.out.println("Pajamos per laikotarpį: " + reportService.getRevenue());
+					System.out.println("Kaštai per laikotarpį: " + reportService.getCosts());
+					System.out.println("Pelnas per laikotarpį: " + reportService.getProfit());
+					System.out.printf("Pelningumas per laikotarpį %.2f%%", reportService.getMargin()*100);
+					System.out.println();
 
 					break;
 				case "6": //Papildyti prekių likučius
 					addNewStock();
 					break;
-				case "7": //Peržiūrėti prekių judėjimą (likutis prad=ioje + gavimas - pardavimas = likutis pabaigoje)
-
-					break;
-				case "8": //Pardavimų peržiūra
-
-					break;
-				case "9": //Pajamų, sąnaudų ir pelno peržiūra
-
-					break;
-				case "10": //Pelningumo ataskaita pagal pozicijas
-
-					break;
-				case "11":
+				case "7":
 					throw new UserLogOutException("Atsijunge");
 				default:
 					System.out.println(NEATPAZINTA_IVESTIS);
@@ -143,7 +137,7 @@ public class Main {
 			return;
 		}
 
-		System.out.println("Jus bandote istrinti save, ar tikrai to norite [T/N]");
+		System.out.println("Jūs bandote ištrinti save, ar tikrai to norite [T/N]");
 		String deleteChoice = SC.nextLine();
 
 		if (!(deleteChoice.equalsIgnoreCase("T") || deleteChoice.equalsIgnoreCase("taip"))) {
@@ -165,7 +159,6 @@ public class Main {
 		System.out.print("Įveskite pristatymo adresą: ");
 		String address = SC.nextLine();
 		int age = getAge();
-		SC.nextLine();
 		Role role = getRoleForNewUser();
 		userService.addUser(new User(username, password, role, name, surname, address, age));
 		System.out.println("--------------Vartotojas sėkmingai užregistruotas------------------");
@@ -344,7 +337,7 @@ public class Main {
 				System.out.println("Preke nerasta sandalyje: "+ stock.getItemId());
 			}
 
-			if(stockFromDb.getItemQt() >= stock.getItemQt()) {
+			if(stockFromDb != null && stockFromDb.getItemQt() >= stock.getItemQt()) {
 				stockFromDb.setQt(stockFromDb.getItemQt() - stock.getItemQt());
 				stockService.updateStock(stockFromDb);
 				reportService.addDataToReport(stock);
@@ -355,9 +348,8 @@ public class Main {
 
 			}
 		}
-//
-//		//Reportas
-//		loggedUser.clearBasket();
+
+		loggedUser.clearBasket();
 	}
 
 
@@ -389,13 +381,13 @@ public class Main {
 		System.out.print("Įveskite prekės pavadinimą: ");
 		String itemName = SC.nextLine();
 
-		double itemCosts = 0;
+		float itemCosts = 0;
 		boolean succes = false;
 		while(succes == false) {
 
 			try {
 				System.out.print("Įveskite prekės savikainą: ");
-				itemCosts = SC.nextDouble();
+				itemCosts = SC.nextFloat();
 			} catch (Exception ex) {
 				System.out.println("Neteisingai ivestas savikaina");
 				SC.nextLine();
@@ -442,13 +434,9 @@ public class Main {
 		System.out.println("[2] Peržiūrėti visų vartotojų informaciją");
 		System.out.println("[3] Pridėti naują vartotoją");
 		System.out.println("[4] Ištrinti egzistuojantį vartotoją");
-		System.out.println("[5] Patvirtinti prekių užsakymą");
+		System.out.println("[5] Ataskaitos");
 		System.out.println("[6] Papildyti prekių likučius");
-		System.out.println("[7] Peržiūrėti prekių judėjimą");
-		System.out.println("[8] Pardavimų peržiūra");
-		System.out.println("[9] Pajamų, sąnaudų ir pelno peržiūra");
-		System.out.println("[10] Pelningumo ataskaita pagal pozicijas");
-		System.out.println("[11] Atsijungti");
+		System.out.println("[7] Atsijungti");
 		System.out.println("************************************************************************************************************");
 	}
 
