@@ -69,7 +69,6 @@ public class Main {
 
 	}
 
-
 	private static void userMenu(User user) throws Exception {
 		if (user.getRole().equals(CUSTOMER)) {
 
@@ -123,7 +122,7 @@ public class Main {
 					addNewStock();
 					break;
 				case "7":
-					throw new UserLogOutException("Atsijunge");
+					throw new UserLogOutException("Atsijungte");
 				default:
 					System.out.println(NEATPAZINTA_IVESTIS);
 					break;
@@ -254,7 +253,6 @@ public class Main {
 		System.out.println();
 	}
 
-
 	private static void customerUserMenu(User customerUser) throws Exception {
 		while (true) {
 			printCustumerMenu();
@@ -367,13 +365,6 @@ public class Main {
 		System.out.println();
 	}
 
-
-
-
-
-
-
-
 	private static void addNewStock() throws Exception {
 		System.out.println("************************************************************************************************************");
 		System.out.print("Įveskite prekės ID: ");
@@ -383,7 +374,7 @@ public class Main {
 
 		float itemCosts = 0;
 		boolean succes = false;
-		while(succes == false) {
+		while(!succes) {
 
 			try {
 				System.out.print("Įveskite prekės savikainą: ");
@@ -413,8 +404,6 @@ public class Main {
 		stockService.addStock(new Stock(itemId, itemName, itemCosts, itemQt));
 		System.out.println("----------Prekės atsargos sėkmingai patalpintos į prekybos sandėlį----------");
 	}
-
-
 
 	private static void printCustumer(User user) {
 		System.out.println("************************************************************************************************************");

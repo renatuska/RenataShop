@@ -22,11 +22,6 @@ public abstract class SqlLiteStorage implements UserStorage, StockStorage, Repor
     }
 
     @Override
-    public void deleteStock(String id) throws Exception {
-
-    }
-
-    @Override
     public User getUser(String username) throws Exception {
         return null;
     }

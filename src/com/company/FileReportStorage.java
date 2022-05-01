@@ -17,8 +17,8 @@ public class FileReportStorage  implements ReportStorage{
         PrintWriter writer = new PrintWriter(fw);
         writeData(writer, stock);
         writer.close();
-
     }
+
     private void writeData(PrintWriter writer, Stock item) {
         writer.println(item.getItemId());
         writer.println(item.getItemName());

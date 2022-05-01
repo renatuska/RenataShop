@@ -71,30 +71,6 @@ public class FileStockStorage implements StockStorage {
         }
     }
 
-    @Override
-    public void deleteStock(String id) throws Exception {
-        ArrayList<Stock> stocks = getAllStocks();
-
-        boolean found = false;
-        for (Stock stock : stocks) {
-            if (stock.getItemId().equalsIgnoreCase(id)) {
-                stocks.remove(stock);
-                found = true;
-                break;
-            }
-        }
-
-        //lets rewrite
-        if(found) {
-            FileWriter fw = new FileWriter(filePath);
-            PrintWriter writer = new PrintWriter(fw);
-            for (Stock s : stocks) {
-                writeStock(writer, s);
-            }
-            writer.close();
-        }
-    }
-
     private void addStock(Stock stock) throws Exception {
         FileWriter fw = new FileWriter(filePath, true);
         PrintWriter writer = new PrintWriter(fw);

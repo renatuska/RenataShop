@@ -24,11 +24,10 @@ public class ReportService {
         revenue = 0;
         ArrayList<Stock> items = db.getAllData();
         for(Stock stock : items ) {
-           revenue =  stock.getItemPrice()+revenue;
+            revenue =  stock.getItemPrice()+revenue;
         }
         return revenue;
     }
-
 
     float getCosts() throws Exception {
         costs = 0;
@@ -39,13 +38,11 @@ public class ReportService {
         return costs;
     }
 
-
     double getProfit() {
 
         profit = revenue - costs;
         return profit;
     }
-
 
     float getMargin() {
 
