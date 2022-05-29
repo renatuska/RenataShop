@@ -1,6 +1,3 @@
-package com.company;
-
-import static com.company.Role.ADMIN;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -47,7 +44,7 @@ public class UserService {
 		int adminCount = 0;
 		for (User user : getAllUsers()) {
 
-			if (user.getRole().equals(ADMIN)) {
+			if (user.getRole().equals(Role.ADMIN)) {
 				adminCount++;
 			}
 		}

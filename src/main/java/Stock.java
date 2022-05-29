@@ -1,11 +1,20 @@
-package com.company;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
+@Entity
 public class Stock {
 
-    private final String itemId;
-    private final String itemName;
-    private final float itemCosts;
+    @Id
+    @Column(nullable = false)
+    private String itemId;
+    private String itemName;
+    private  float itemCosts;
     private int itemQt;
+
+    public Stock() {
+
+    }
 
     public Stock(String itemId, String itemName, float itemCosts, int itemQt) {
         this.itemId = itemId;
@@ -20,12 +29,13 @@ public class Stock {
     public String getItemName() {
         return itemName;
     }
-
     public float getItemCosts() {
         return itemCosts;
     }
-
     public  float getItemPrice() {
+        return Stock.getItemPrice(itemCosts);
+    }
+    public static float getItemPrice(float itemCosts) {
         if(itemCosts < 20) {
             return itemCosts * (float)1.3;
         } else {
@@ -36,7 +46,6 @@ public class Stock {
     public void setQt(int qt) {
         itemQt = qt;
     }
-
     public int getItemQt() {
         return itemQt;
     }

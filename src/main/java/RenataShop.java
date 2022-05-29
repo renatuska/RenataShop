@@ -1,28 +1,23 @@
-package com.company;
-
-import static com.company.Role.ADMIN;
-import static com.company.Role.CUSTOMER;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class Main {
+public class RenataShop {
 
 	private static final String NEATPAZINTA_IVESTIS = "Neatpažinta įvestis";
 
 	private static final Scanner SC = new Scanner(System.in);
 
 
-	static UserService userService = new UserService(new FileUserStorage("src/com/company/userdata"));
-	static StockService stockService = new StockService(new FileStockStorage("src/com/company/stockdata"));
-	static ReportService reportService = new ReportService(new FileReportStorage("src/com/company/reportdata"));
+	//static UserService userService = new UserService(new FileUserStorage("src/com/company/userdata"));
+	//static StockService stockService = new StockService(new FileStockStorage("src/com/company/stockdata"));
+	//static ReportService reportService = new ReportService(new FileReportStorage("src/com/company/reportdata"));
 
-	//static SqlLiteStorage db = new SqlLiteStorage();
-	//static UserService userService = new UserService(db);
-	//static StockService stockService = new StockService(db);
-	//static ReportService reportService = new ReportService(db);
+	static SqlLiteStorage db = new SqlLiteStorage();
+	static UserService userService = new UserService(db);
+	static StockService stockService = new StockService(db);
+	static ReportService reportService = new ReportService(db);
 
 	public static void main(String[] args) throws Exception {
 		User loggedUser = null;
@@ -30,6 +25,15 @@ public class Main {
 			while (true) {
 				if (loggedUser == null) {
 					printLoginMenu();
+				} else {
+					try {
+						userMenu(loggedUser);
+					} catch (UserException e) {
+						System.out.println(e.getMessage());
+					} catch (UserLogOutException e) {
+						loggedUser = null;
+						continue;
+					}
 				}
 
 				String loginChoice = SC.nextLine();
@@ -70,10 +74,10 @@ public class Main {
 	}
 
 	private static void userMenu(User user) throws Exception {
-		if (user.getRole().equals(CUSTOMER)) {
+		if (user.getRole().equals(Role.CUSTOMER)) {
 
 			customerUserMenu(user);
-		} else if (user.getRole().equals(ADMIN)) {
+		} else if (user.getRole().equals(Role.ADMIN)) {
 
 			adminUserMenu(user);
 		}
@@ -111,9 +115,12 @@ public class Main {
 				case "5": // Ataskaitos:
 					System.out.println("************************************************************************************************************");
 					System.out.println("Ataskaitos: ");
-					System.out.println("Pajamos per laikotarpį: " + reportService.getRevenue());
-					System.out.println("Kaštai per laikotarpį: " + reportService.getCosts());
-					System.out.println("Pelnas per laikotarpį: " + reportService.getProfit());
+					System.out.printf("Pajamos per laikotarpį Eur: %.2f", reportService.getRevenue());
+					System.out.println();
+					System.out.printf("Kaštai per laikotarpį Eur: %.2f", reportService.getCosts());
+					System.out.println();
+					System.out.printf("Pelnas per laikotarpį Eur: %.2f", reportService.getProfit());
+					System.out.println();
 					System.out.printf("Pelningumas per laikotarpį %.2f%%", reportService.getMargin()*100);
 					System.out.println();
 
@@ -175,7 +182,7 @@ public class Main {
 		System.out.print("Įveskite pristatymo adresą: ");
 		String address = SC.nextLine();
 		int age = getAge();
-		User user = new User(username, password, CUSTOMER, name, surname, address, age);
+		User user = new User(username, password, Role.CUSTOMER, name, surname, address, age);
 		userService.addUser(user);
 		System.out.println("Vartotojas sėkmingai užregistruotas");
 		System.out.println();
@@ -227,9 +234,9 @@ public class Main {
 
 			switch (choice) {
 				case "1":
-					return CUSTOMER;
+					return Role.CUSTOMER;
 				case "2":
-					return ADMIN;
+					return Role.ADMIN;
 				default:
 					System.out.println(NEATPAZINTA_IVESTIS);
 			}
@@ -338,7 +345,7 @@ public class Main {
 			if(stockFromDb != null && stockFromDb.getItemQt() >= stock.getItemQt()) {
 				stockFromDb.setQt(stockFromDb.getItemQt() - stock.getItemQt());
 				stockService.updateStock(stockFromDb);
-				reportService.addDataToReport(stock);
+				reportService.addDataToReport(new Log(stock));
 				System.out.println("Pirkimo procesas sėkmingai užbaigtas");
 
 			}  else {
@@ -360,7 +367,8 @@ public class Main {
 	public static void printStock(Stock stock) {
 		System.out.println("************************************************************************************************************");
 		System.out.println("Prekės pavadinimas: " + stock.getItemName());
-		System.out.println("Prekės kaina: " + stock.getItemPrice());
+		System.out.printf("Prekės kaina: %.2f", stock.getItemPrice());
+		System.out.println();
 		System.out.println("Prekių kiekis sandėlyje: " + stock.getItemQt());
 		System.out.println();
 	}
@@ -387,6 +395,7 @@ public class Main {
 			succes = true;
 		}
 
+		Stock existingStock = stockService.getStockbyId(itemId);
 		int itemQt = 0;
 		boolean qt = false;
 		while(!qt) {
@@ -401,6 +410,9 @@ public class Main {
 			qt = true;
 		}
 		SC.nextLine();
+		if(existingStock != null) {
+			itemQt += existingStock.getItemQt();
+		}
 		stockService.addStock(new Stock(itemId, itemName, itemCosts, itemQt));
 		System.out.println("----------Prekės atsargos sėkmingai patalpintos į prekybos sandėlį----------");
 	}

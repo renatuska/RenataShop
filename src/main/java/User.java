@@ -1,11 +1,16 @@
-package com.company;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
 
+@Entity
 public class User  {
 
+	@Id
+	@Column(nullable = false)
 	private String username;
 	private String password;
 	private Role role;
@@ -13,8 +18,18 @@ public class User  {
 	private String surname;
 	private String address;
 	private int age;
+
+	@Transient
 	private Hashtable<String, Stock> basket;
 
+	public User() {
+		this.basket = new Hashtable<>();
+	}
+
+	public User(String username) {
+		this.username = username;
+		this.basket = new Hashtable<>();
+	}
 
 	public User(String username, String password, Role role, String name, String surname, String address, int age) {
 		this.username = username;

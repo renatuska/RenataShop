@@ -1,5 +1,3 @@
-package com.company;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -13,27 +11,27 @@ public class ReportService {
         this.db = db;
     }
 
-    public void addDataToReport(Stock stock) throws Exception {
-        db.addDataToReport(stock);
+    public void addDataToReport(Log log) throws Exception {
+        db.addDataToReport(log);
     }
-    public ArrayList<Stock> getAllData() throws Exception {
+    public ArrayList<Log> getAllData() throws Exception {
         return db.getAllData();
     }
 
     float getRevenue() throws Exception {
         revenue = 0;
-        ArrayList<Stock> items = db.getAllData();
-        for(Stock stock : items ) {
-            revenue =  stock.getItemPrice()+revenue;
+        ArrayList<Log> items = db.getAllData();
+        for(Log log : items ) {
+            revenue =  log.getItemPrice() * log.getItemQt() +revenue;
         }
         return revenue;
     }
 
     float getCosts() throws Exception {
         costs = 0;
-        ArrayList<Stock> items = db.getAllData();
-        for(Stock stock : items) {
-            costs =  stock.getItemCosts()+costs;
+        ArrayList<Log> items = db.getAllData();
+        for(Log log : items) {
+            costs =  log.getItemCosts()* log.getItemQt()+costs;
         }
         return costs;
     }

@@ -1,5 +1,3 @@
-package com.company;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -12,14 +10,14 @@ public class FileReportStorage  implements ReportStorage{
     }
 
     @Override
-    public void addDataToReport(Stock stock) throws Exception {
+    public void addDataToReport(Log log) throws Exception {
         FileWriter fw = new FileWriter(filePath, true);
         PrintWriter writer = new PrintWriter(fw);
-        writeData(writer, stock);
+        writeData(writer, log);
         writer.close();
     }
 
-    private void writeData(PrintWriter writer, Stock item) {
+    private void writeData(PrintWriter writer, Log item) {
         writer.println(item.getItemId());
         writer.println(item.getItemName());
         writer.println(item.getItemCosts());
@@ -28,10 +26,10 @@ public class FileReportStorage  implements ReportStorage{
     }
 
     @Override
-    public ArrayList<Stock> getAllData() throws Exception {
+    public ArrayList<Log> getAllData() throws Exception {
         File file = new File(filePath);
         Scanner sc = new Scanner(file);
-        ArrayList<Stock> stocks = new ArrayList<>();
+        ArrayList<Log> logs = new ArrayList<>();
 
         while (sc.hasNextLine()) {
             String itemId = sc.nextLine();
@@ -41,10 +39,10 @@ public class FileReportStorage  implements ReportStorage{
             sc.nextLine();
             sc.nextLine();
 
-            Stock stock = new Stock(itemId, itemName, itemCosts, itemQt);
-            stocks.add(stock);
+            Log log = new Log(new Stock(itemId, itemName, itemCosts, itemQt));
+            logs.add(log);
         }
-        return stocks;
+        return logs;
     }
 
 
